@@ -1,0 +1,13 @@
+DISCLAMER: 64-bit Windows NT only
+
+I am testing this on Windows 8.
+I am pretty confident that the code
+will work right on windows 7, but
+the PEB structure changed a bit on
+windows 8.1 and therefore I am not
+sure weather it will work.
+
+If any problems arise contact me via
+github and I will be glad to help.
+
+BTW: have you heard of stack probing?
