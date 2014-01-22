@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#define rva_to_offset(base, rva)    ((void *)((uint8_t *)(base) + (rva)))
+
 struct dos_header {
     uint16_t e_magic;
     uint16_t e_cblp;
@@ -24,10 +26,6 @@ struct dos_header {
     uint32_t e_lfanew;
 };
 
-struct nt_header {
-    uint32_t Signature;
-};
-
 struct file_header {
     uint16_t Machine;
     uint16_t NumberOfSections;
@@ -38,41 +36,10 @@ struct file_header {
     uint16_t Characteristics;
 };
 
-struct optional_header {
-    uint16_t Magic;
-    uint8_t  MajorLikerVersion;
-    uint8_t  MinorLinkerVersion;
-    uint32_t SizeOfCode;
-    uint32_t SizeOfInitializedData;
-    uint32_t SizeOfUninitializedData;
-    uint32_t AddressOfEntryPoint;
-    uint32_t BaseOfCode;
-    uint64_t ImageBase;
-    uint32_t SectionAlignment;
-    uint16_t MajorOperatingSystemVersion;
-    uint16_t MinorOperatingSystemVersion;
-    uint16_t MajorImageVersion;
-    uint16_t MinorImageVersion;
-    uint16_t MajorSubsystemVersion;
-    uint16_t MinorSubsystemVersion;
-    uint32_t Win32VersionValue;
-    uint32_t SizeOfImage;
-    uint32_t SizeOfHeaders;
-    uint32_t CheckSum;
-    uint16_t Subsystem;
-    uint16_t DllCharacteristics;
-    uint64_t SizeOfStackReserve;
-    uint64_t SizeOfStackCommit;
-    uint64_t SizeOfHeapReserve;
-    uint64_t SizeOfHeapCommit;
-    uint32_t LoaderFlags;
-    uint32_t NumberOfRvaAndSize;
-};
-
 struct directory {
     uint32_t rva;
     uint32_t size;
-}
+};
 
 struct data_directory{
     struct directory Export;
@@ -92,7 +59,45 @@ struct data_directory{
     struct directory NET;
 };
 
-//TODO rename fields
+struct optional_header {
+    uint16_t Magic;
+    uint8_t  MajorLikerVersion;
+    uint8_t  MinorLinkerVersion;
+    uint32_t SizeOfCode;
+    uint32_t SizeOfInitializedData;
+    uint32_t SizeOfUninitializedData;
+    uint32_t AddressOfEntryPoint;
+    uint32_t BaseOfCode;
+    uint64_t ImageBase;
+    uint32_t SectionAlignment;
+    uint32_t FileAlignment;
+    uint16_t MajorOperatingSystemVersion;
+    uint16_t MinorOperatingSystemVersion;
+    uint16_t MajorImageVersion;
+    uint16_t MinorImageVersion;
+    uint16_t MajorSubsystemVersion;
+    uint16_t MinorSubsystemVersion;
+    uint32_t Win32VersionValue;
+    uint32_t SizeOfImage;
+    uint32_t SizeOfHeaders;
+    uint32_t CheckSum;
+    uint16_t Subsystem;
+    uint16_t DllCharacteristics;
+    uint64_t SizeOfStackReserve;
+    uint64_t SizeOfStackCommit;
+    uint64_t SizeOfHeapReserve;
+    uint64_t SizeOfHeapCommit;
+    uint32_t LoaderFlags;
+    uint32_t NumberOfRvaAndSize;
+    struct data_directory DataDirectory;
+};
+
+struct nt_header {
+    uint32_t Signature;
+    struct file_header FileHeader;
+    struct optional_header OptionalHeader;
+};
+
 struct section_header {
     char name[8];
     uint32_t size;
@@ -106,6 +111,26 @@ struct section_header {
     uint32_t charicteristics;
 };
 
+struct export_directory {
+    uint32_t chariteristics;
+    uint32_t timestamp;
+    uint16_t major_ver;
+    uint16_t minor_ver;
+    uint32_t name;
+    uint32_t base;
+    uint32_t num_funcs;
+    uint32_t num_names;
+    uint32_t addr_funcs;
+    uint32_t addr_names;
+    uint32_t addr_ords;
+};
 
+struct import_directory {
+    uint32_t orig_thunk;
+    uint32_t timestamp;
+    uint32_t forwarder_chain;
+    uint32_t name;
+    uint32_t first_thunk;
+};
 
 #endif//PE_STUCTS_H_INCLUDED

@@ -30,16 +30,11 @@ char *lastSlash(char *str)
 #define is_upper(x) ((0x40 < x) && (x < 0x5B))
 #define to_lower(x) (x + 0x20)
 
-bool dllMatch(struct unicode_string *str, const char *str2)
+bool match(const char *str1, const char *str2)
 {
-    size_t len = uniStrLen(str);
-    char buf[len];
-
-    uniToAscii(buf, str, len);
-    
-    char *ita = lastSlash(buf) + 1;
+    char *ita = (char *)str1;
     char *itb = (char *)str2;
-    
+
     while(*ita || *itb){
         if(!(*ita))     return false;
         if(!(*itb))     return false;
@@ -57,4 +52,14 @@ bool dllMatch(struct unicode_string *str, const char *str2)
     }
     
     return true;
+}
+
+bool dllMatch(struct unicode_string *str, const char *str2)
+{
+    size_t len = uniStrLen(str);
+    char buf[len];
+
+    uniToAscii(buf, str, len);
+    
+    return match(lastSlash(buf) + 1, str2);
 }

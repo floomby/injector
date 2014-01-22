@@ -11,5 +11,6 @@ struct unicode_string {
 };
 
 bool dllMatch(struct unicode_string *str, const char *str2);
+bool match(const char *str1, const char *str2);
 
 #endif//STR_H_INCULDED

@@ -4,7 +4,7 @@
 
 #include <windows.h>
 
-#include "pe_things.h"
+#include "dll_load.h"
 
 void *load_to_mem(const char *name)
 {
@@ -14,8 +14,6 @@ void *load_to_mem(const char *name)
     fseek(fp, 0, SEEK_END);
     size_t size = ftell(fp);
     rewind(fp);
-    
-    //printf("file size is %x\n", size);
     
     void *ret = malloc(size);
     assert(ret);
@@ -36,7 +34,7 @@ int main(int argc, char *argv[])
     
     void *buf = load_to_mem(argv[1]);
     
-    load(buf);
+    load2(buf);
     
     free(buf);
     

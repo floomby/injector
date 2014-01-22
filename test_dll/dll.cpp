@@ -2,7 +2,7 @@
 
 int blah()
 {
-    Sleep(1000);
+    MessageBoxA(NULL, "attached", "attached", MB_OK);
     return GetLastError();
 }
 
@@ -10,7 +10,6 @@ extern "C" BOOL APIENTRY __declspec(dllexport) DllMain(HINSTANCE hinstDLL, DWORD
 {
     switch (fdwReason){
         case DLL_PROCESS_ATTACH:
-            // MessageBoxA(NULL, "attached", "attached", MB_OK);
             Sleep(3000);
             break;
         case DLL_PROCESS_DETACH:
