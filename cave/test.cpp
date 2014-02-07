@@ -1,8 +1,3 @@
-#include <cstdio>
-#include <cstring>
-#include <cstdint>
-#include <cstdlib>
-
 #include <windows.h>
 
 __attribute__ ((__optimize__("omit-frame-pointer"))) void loadDll()
@@ -110,6 +105,24 @@ DWORD getThreadFromPid(DWORD pid)
     return ret;
 }
 
+// TODO: we need to pick a good pid to inject into
+
+extern "C" BOOL APIENTRY __declspec(dllexport) DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+{   
+    switch (fdwReason){
+        case DLL_PROCESS_ATTACH:
+            break;
+        case DLL_PROCESS_DETACH:
+            break;
+        case DLL_THREAD_ATTACH:
+            break;
+        case DLL_THREAD_DETACH:
+            break;
+    }
+    return TRUE;
+}
+
+/*
 int main(int argc, char *argv[])
 {
     if(argc != 3){
@@ -124,3 +137,4 @@ int main(int argc, char *argv[])
     
     return 0;
 }
+*/

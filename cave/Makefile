@@ -1,15 +1,17 @@
-CC = x86_64-w64-mingw32-g++ -std=c++11 -static-libstdc++ -static-libgcc -g
+CC = x86_64-w64-mingw32-g++ -nostdlib -nostartfiles
 
+ASMS = $(wildcard *.s)
+SRCS = $(wildcard *.cpp)
+OBJS = $(SRCS:.cpp=.o) $(ASMS:.s=.o)
 
-SRCS := $(wildcard *.cpp)
-OBJS = $(SRCS:.cpp=.o)
+dll: $(OBJS)
+	$(CC) -o test.dll $(OBJS) -shared \
+		-Wl,--enable-auto-import \
+		-Wl,--no-whole-archive -lkernel32 -lmsvcrt \
+		-Wl,-eDllMain
 
-test: $(OBJS)
-	$(CC) -o test $(OBJS)
-
-
-$(OBJS): $(SRCS)
-	$(CC) -c $(SRCS)
+$(OBJS): $(SRCS) $(ASMS)
+	$(CC) $(FLAGS) -c $(SRCS) $(ASMS)
 
 clean:
-	rm $(OBJS) test.exe
+	rm test.dll *.o
